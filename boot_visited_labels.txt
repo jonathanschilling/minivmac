@@ -140,6 +140,7 @@ DSErrorHandler	src/debugger/debugger.s
 DT166	src/resources/resources.s
 DT77	src/resources/resources.s
 DT78	src/resources/resources.s
+DT79	src/resources/resources.s
 DTRMV1	src/os/file_mgr.s
 DTRMV3	src/os/file_mgr.s
 DebugProlog	src/boot/memtest.s
@@ -240,8 +241,8 @@ E_359	src/toolbox/quickdraw/DrawArc.s
 E_416	src/toolbox/quickdraw/Stretch.s
 E_421	src/toolbox/quickdraw/Stretch.s
 E_423	src/toolbox/quickdraw/Stretch.s
-E_439	src/toolbox/quickdraw/Stretch.s
 E_507	src/toolbox/font_mgr.s
+E_548	src/os/memory_mgr.s
 E_549	src/os/memory_mgr.s
 E_550	src/os/memory_mgr.s
 E_551	src/os/memory_mgr.s
@@ -324,6 +325,7 @@ ExitToShell	src/toolbox/font_mgr.s
 FAST	src/toolbox/quickdraw/DrawText.s
 FASTLINE	src/toolbox/quickdraw/DrawLine.s
 FILL31	src/toolbox/quickdraw/BitBlt.s
+FILL32	src/toolbox/quickdraw/BitBlt.s
 FILLED	src/toolbox/quickdraw/Rects.s
 FORE1	src/toolbox/quickdraw/Util.s
 FOUND	src/toolbox/quickdraw/Stretch.s
@@ -471,6 +473,7 @@ L111	src/boot/vectors.s
 L112	src/boot/vectors.s
 L113	src/boot/vectors.s
 L114	src/boot/vectors.s
+L116	src/boot/memtest.s
 L117	src/boot/memtest.s
 L119	src/boot/memtest.s
 L120	src/boot/memtest.s
@@ -1709,7 +1712,10 @@ L3650	src/resources/resources.s
 L3652	src/resources/resources.s
 L3654	src/resources/resources.s
 L366	src/os/device_mgr.s
+L3665	src/resources/resources.s
 L3666	src/resources/resources.s
+L3667	src/resources/resources.s
+L3668	src/resources/resources.s
 L3669	src/resources/resources.s
 L367	src/os/device_mgr.s
 L3671	src/resources/resources.s
@@ -2452,6 +2458,7 @@ P8	src/boot/vectors.s
 P80	src/os/file_mgr.s
 P84	src/os/file_mgr.s
 P85	src/os/file_mgr.s
+P853	src/resources/resources.s
 P87	src/os/file_mgr.s
 P88	src/os/file_mgr.s
 P89	src/os/file_mgr.s
@@ -2746,6 +2753,8 @@ WaitMouseUp	src/toolbox/toolbox_event.s
 Write	src/os/device_mgr.s
 WriteBlock	src/os/file_mgr.s
 WriteRTCByte	src/boot/vectors.s
+XOR31	src/toolbox/quickdraw/BitBlt.s
+XOR32	src/toolbox/quickdraw/BitBlt.s
 XORRGN_COPY	src/toolbox/quickdraw/Regions.s
 XORRGN_NOTSAME	src/toolbox/quickdraw/Regions.s
 XORRGN_ZERO	src/toolbox/quickdraw/Regions.s
