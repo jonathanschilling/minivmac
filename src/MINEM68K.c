@@ -38,6 +38,67 @@
 #include "DISAM68K.h"
 #endif
 
+/* === Boot trace hook === */
+#include <stdio.h>
+#include <string.h>
+#define TRACE_ROM_BASE 0x00400000
+#define TRACE_ROM_SIZE 0x20000
+static ui3b trace_coverage[TRACE_ROM_SIZE];
+static ui5r trace_log[4*1024*1024];
+static ui5r trace_log_idx = 0;
+static ui5r trace_total = 0;
+static blnr trace_active = trueblnr;
+static blnr trace_dumped = falseblnr;
+
+LOCALPROC trace_dump(void) {
+	FILE *f;
+	if (trace_dumped) return;
+	f = fopen("boot_trace.bin", "wb");
+	if (f) {
+		fwrite(trace_log, 4, trace_log_idx, f);
+		fclose(f);
+	}
+	f = fopen("boot_coverage.bin", "wb");
+	if (f) {
+		fwrite(trace_coverage, 1, TRACE_ROM_SIZE, f);
+		fclose(f);
+	}
+	trace_dumped = trueblnr;
+	fprintf(stderr, "TRACE: dumped %u log entries, %u total ROM instructions\n",
+		trace_log_idx, trace_total);
+}
+
+LOCALPROC trace_pc_hit(ui5r pc) {
+	if (!trace_active) return;
+	if (pc >= TRACE_ROM_BASE && pc < TRACE_ROM_BASE + TRACE_ROM_SIZE) {
+		ui5r offset = pc - TRACE_ROM_BASE;
+		if (!trace_coverage[offset]) {
+			trace_coverage[offset] = 1;
+		}
+		if (trace_log_idx < 4*1024*1024) {
+			trace_log[trace_log_idx++] = offset; /* store ROM offset, not absolute PC */
+		}
+		trace_total++;
+	}
+}
+
+/* dump trace on program exit or signal */
+#include <signal.h>
+#include <stdlib.h>
+#include <unistd.h>
+static void trace_signal(int sig) {
+	(void)sig;
+	trace_dump();
+	_exit(0);
+}
+__attribute__((constructor)) static void trace_init_signals(void) {
+	signal(SIGTERM, trace_signal);
+	signal(SIGINT, trace_signal);
+	signal(SIGHUP, trace_signal);
+	atexit(trace_dump);
+}
+/* === end trace hook === */
+
 #include "MINEM68K.h"
 
 /*
@@ -820,6 +881,12 @@ LOCALPROC m68k_go_MaxCycles(void)
 
 	do {
 		V_regs.CurDecOpY = y;
+
+		/* boot trace hook */
+		{
+			CPTR pc = m68k_getpc() - 2;
+			trace_pc_hit(pc);
+		}
 
 #if WantDisasm || WantBreakPoint
 		{
